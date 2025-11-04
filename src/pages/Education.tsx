@@ -36,6 +36,10 @@ const Education = () => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speechUtterance, setSpeechUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+  const [savedArticles, setSavedArticles] = useState<number[]>([]);
+  const [downloadedAudio, setDownloadedAudio] = useState<number[]>([]);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [showOfflineContent, setShowOfflineContent] = useState(false);
 
   const topicArticles = {
     "Heart Health": [
