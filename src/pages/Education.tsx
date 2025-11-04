@@ -288,6 +288,65 @@ const Education = () => {
     window.speechSynthesis.speak(utterance);
   };
 
+  const handleSaveArticle = (articleId: number, articleTitle: string) => {
+    if (savedArticles.includes(articleId)) {
+      setSavedArticles(savedArticles.filter(id => id !== articleId));
+      toast({
+        title: "Article Removed",
+        description: `Removed "${articleTitle}" from saved articles.`,
+      });
+    } else {
+      setSavedArticles([...savedArticles, articleId]);
+      toast({
+        title: "Article Saved",
+        description: `"${articleTitle}" saved for offline access.`,
+      });
+    }
+  };
+
+  const handleDownloadAudio = (articleId: number, articleTitle: string) => {
+    if (downloadedAudio.includes(articleId)) {
+      setDownloadedAudio(downloadedAudio.filter(id => id !== articleId));
+      toast({
+        title: "Audio Removed",
+        description: `Removed audio for "${articleTitle}".`,
+      });
+    } else {
+      setDownloadedAudio([...downloadedAudio, articleId]);
+      toast({
+        title: "Audio Downloaded",
+        description: `Audio version of "${articleTitle}" saved for offline listening.`,
+      });
+    }
+  };
+
+  const offlineArticles = savedArticles.length;
+  const offlineAudios = downloadedAudio.length;
+
+  const videoTutorials = [
+    {
+      id: 1,
+      title: "Blood Pressure Monitoring Tutorial",
+      category: "Heart Health",
+      duration: "8 min",
+      description: "Step-by-step guide on how to measure and record blood pressure at home."
+    },
+    {
+      id: 2,
+      title: "Diabetes Care Essentials",
+      category: "Diabetes Care",
+      duration: "10 min",
+      description: "Learn about daily diabetes management and insulin injection techniques."
+    },
+    {
+      id: 3,
+      title: "Nutritious Meal Preparation",
+      category: "Nutrition",
+      duration: "12 min",
+      description: "Practical cooking tips for preparing healthy meals with local ingredients."
+    },
+  ];
+
   const categories = [
     { 
       icon: Heart, 
