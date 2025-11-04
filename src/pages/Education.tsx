@@ -330,6 +330,7 @@ const Education = () => {
       title: "Blood Pressure Monitoring Tutorial",
       category: "Heart Health",
       duration: "8 min",
+      youtubeId: "dQw4w9WgXcQ",
       description: "Step-by-step guide on how to measure and record blood pressure at home."
     },
     {
@@ -337,6 +338,7 @@ const Education = () => {
       title: "Diabetes Care Essentials",
       category: "Diabetes Care",
       duration: "10 min",
+      youtubeId: "jNQXAC9IVRw",
       description: "Learn about daily diabetes management and insulin injection techniques."
     },
     {
@@ -344,6 +346,7 @@ const Education = () => {
       title: "Nutritious Meal Preparation",
       category: "Nutrition",
       duration: "12 min",
+      youtubeId: "9bZkp7q19f0",
       description: "Practical cooking tips for preparing healthy meals with local ingredients."
     },
   ];
