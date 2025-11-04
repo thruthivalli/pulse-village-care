@@ -8,12 +8,7 @@ export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
-    middlewareMode: false,
-    hmr: {
-      protocol: "wss",
-      host: "0.0.0.0",
-      port: 443,
-    },
+    hmr: false,
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
