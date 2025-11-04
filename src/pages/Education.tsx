@@ -525,7 +525,23 @@ const Education = () => {
                       Read
                     </Button>
                     {article.audioAvailable && (
-                      <Button variant="outline" size="sm">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedArticle(article);
+                          setTimeout(() => {
+                            const utterance = new SpeechSynthesisUtterance(`${article.title}. ${article.content}`);
+                            utterance.rate = 1;
+                            utterance.pitch = 1;
+                            utterance.volume = 1;
+                            utterance.onstart = () => setIsPlaying(true);
+                            utterance.onend = () => setIsPlaying(false);
+                            setSpeechUtterance(utterance);
+                            window.speechSynthesis.speak(utterance);
+                          }, 100);
+                        }}
+                      >
                         <Volume2 className="w-4 h-4" />
                       </Button>
                     )}
