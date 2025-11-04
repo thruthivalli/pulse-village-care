@@ -765,34 +765,93 @@ const Education = () => {
           </Card>
         </div>
 
+        {/* Video Tutorials */}
+        {!showOfflineContent && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Video Tutorials</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videoTutorials.map((video) => (
+                <Card key={video.id} className="p-6 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">
+                      {video.category}
+                    </span>
+                  </div>
+
+                  <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center mb-4">
+                    <Play className="w-12 h-12 text-muted-foreground" />
+                  </div>
+
+                  <h3 className="text-lg font-bold text-foreground mb-2">{video.title}</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">{video.description}</p>
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <span>{video.duration}</span>
+                  </div>
+
+                  <Button className="w-full" variant="outline">
+                    <Play className="w-4 h-4 mr-2" />
+                    Watch Tutorial
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Offline Access Info */}
         <Card className="p-6 bg-secondary/5 border-secondary/20">
           <h2 className="text-xl font-bold text-foreground mb-3 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-secondary" />
             Offline Learning
           </h2>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-6">
             All health education content is cached for offline access. Audio versions can be downloaded for listening without internet.
           </p>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-secondary" />
+
+          <div className="grid md:grid-cols-3 gap-4 text-sm mb-6">
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{offlineArticles} Articles Saved</span>
               </div>
-              <span>Text articles saved</span>
+              <p className="text-xs text-muted-foreground">Articles available offline</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <Volume2 className="w-4 h-4 text-secondary" />
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <Volume2 className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{offlineAudios} Audios Downloaded</span>
               </div>
-              <span>Audio versions available</span>
+              <p className="text-xs text-muted-foreground">Audio versions ready to play</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <Play className="w-4 h-4 text-secondary" />
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <Play className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{videoTutorials.length} Video Tutorials</span>
               </div>
-              <span>Video tutorials cached</span>
+              <p className="text-xs text-muted-foreground">Educational videos cached</p>
             </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              className="flex-1"
+              onClick={() => setShowOfflineContent(!showOfflineContent)}
+            >
+              {showOfflineContent ? "View All Content" : "View Offline Content"}
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1"
+            >
+              Download All
+            </Button>
           </div>
         </Card>
       </div>
