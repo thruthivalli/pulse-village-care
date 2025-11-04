@@ -54,10 +54,29 @@ const Emergency = () => {
       title: "Processing emergency request",
       description: `Analyzing: "${text}"`,
     });
-    
+
     if (text.toLowerCase().includes('help') || text.toLowerCase().includes('emergency')) {
       handleEmergencyRequest();
     }
+  };
+
+  const handleCall = (phoneNumber: string, contactName: string) => {
+    // Use tel: protocol to initiate phone call
+    window.location.href = `tel:${phoneNumber.replace(/\s+/g, '')}`;
+    toast({
+      title: "Calling",
+      description: `Initiating call to ${contactName}...`,
+    });
+  };
+
+  const handleGetDirections = (hospitalName: string) => {
+    // Open Google Maps with hospital location
+    const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(hospitalName)}`;
+    window.open(mapsUrl, '_blank');
+    toast({
+      title: "Opening Maps",
+      description: `Getting directions to ${hospitalName}...`,
+    });
   };
 
   const emergencyContacts = [
