@@ -34,6 +34,8 @@ const Education = () => {
   const { toast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [speechUtterance, setSpeechUtterance] = useState<SpeechSynthesisUtterance | null>(null);
 
   const topicArticles = {
     "Heart Health": [
