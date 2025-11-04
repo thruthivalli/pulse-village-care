@@ -266,28 +266,34 @@ const Education = () => {
 
   const featuredArticles = [
     {
+      id: 1,
       title: "Managing High Blood Pressure",
       category: "Heart Health",
       duration: "5 min read",
       audioAvailable: true,
       language: "English, Hindi, Tamil",
-      description: "Essential tips for controlling hypertension through diet and lifestyle changes."
+      description: "Essential tips for controlling hypertension through diet and lifestyle changes.",
+      content: "High blood pressure (hypertension) is a leading cause of heart disease and stroke. It often has no symptoms, which is why it's called the 'silent killer'. Managing high blood pressure involves lifestyle changes and sometimes medication.\n\nKey strategies include:\n\n1. Reduce Sodium Intake: Limit salt to less than 2,300 mg per day. Use herbs and spices for flavoring instead of salt.\n\n2. Exercise Regularly: Aim for 150 minutes of moderate-intensity aerobic activity per week. This can help lower blood pressure by 5-7 mmHg.\n\n3. Maintain Healthy Weight: Losing just 10 pounds can significantly reduce blood pressure.\n\n4. Manage Stress: Practice relaxation techniques like deep breathing, yoga, or meditation.\n\n5. Eat Potassium-Rich Foods: Include foods like bananas, sweet potatoes, and leafy greens. Potassium helps balance sodium.\n\n6. Monitor Your Blood Pressure: Regular monitoring helps track progress and catch problems early.\n\n7. Limit Alcohol: Excessive alcohol consumption raises blood pressure.\n\n8. Medications: If lifestyle changes aren't enough, your doctor may prescribe medications to help control blood pressure. Always take medications as prescribed."
     },
     {
+      id: 2,
       title: "Understanding Diabetes",
       category: "Diabetes Care",
       duration: "7 min read",
       audioAvailable: true,
       language: "English, Hindi",
-      description: "Learn about blood sugar management, symptoms, and daily care routines."
+      description: "Learn about blood sugar management, symptoms, and daily care routines.",
+      content: "Diabetes is a chronic disease that affects how your body manages blood glucose (sugar). There are three main types: Type 1, Type 2, and Gestational diabetes.\n\nType 1 Diabetes occurs when the pancreas cannot produce insulin. It usually develops in children and young adults and requires daily insulin injections.\n\nType 2 Diabetes happens when the body cannot use insulin effectively (insulin resistance). It's the most common type and is often linked to lifestyle factors.\n\nSymptoms of diabetes include:\n- Increased thirst and frequent urination\n- Extreme fatigue\n- Unexplained weight loss\n- Blurred vision\n- Slow-healing wounds\n\nManaging Diabetes:\n\n1. Monitor Blood Sugar: Check your blood glucose levels as recommended by your healthcare provider using a glucometer.\n\n2. Eat Healthy: Choose whole grains, vegetables, and lean proteins. Avoid sugary drinks and processed foods.\n\n3. Stay Active: Regular exercise helps improve insulin sensitivity. Aim for at least 30 minutes of activity daily.\n\n4. Take Medications: If prescribed insulin or other medications, take them exactly as directed.\n\n5. Regular Check-ups: Visit your doctor regularly to monitor kidney function, eye health, and foot health.\n\n6. Manage Stress: Stress can affect blood sugar levels.\n\n7. Quit Smoking: Smoking increases the risk of diabetes complications."
     },
     {
+      id: 3,
       title: "Nutrition for Rural Communities",
       category: "Nutrition",
       duration: "4 min read",
       audioAvailable: true,
       language: "English, Hindi, Telugu",
-      description: "Affordable and nutritious meal planning with locally available foods."
+      description: "Affordable and nutritious meal planning with locally available foods.",
+      content: "Nutrition is crucial for health, but in rural communities, access to diverse food can be limited. However, local and traditional foods can provide excellent nutrition when properly planned.\n\nLocal Foods Rich in Nutrition:\n\n1. Grains: Rice, wheat, millet, and sorghum are excellent sources of carbohydrates and fiber. Choose whole grains when possible.\n\n2. Pulses (Legumes): Dal, beans, and lentils are rich in protein, fiber, and minerals. Combine with grains to create complete proteins.\n\n3. Vegetables: Leafy greens like spinach and cabbage provide iron and vitamins. Root vegetables offer carbohydrates and minerals.\n\n4. Local Fruits: Seasonal fruits provide vitamins and minerals. Mango, guava, and papaya are nutrient-dense.\n\n5. Eggs and Local Poultry: Excellent sources of protein and affordable.\n\nSample Meal Plan:\n\nBreakfast: Whole grain bread or rice with vegetables and eggs\nLunch: Dal with rice or millet, seasonal vegetables, and jaggery for sweetness\nDinner: Vegetable soup or stew with whole grains\nSnacks: Fruits, nuts, or seeds\n\nTips for Better Nutrition:\n- Plan meals seasonally using what's available\n- Include all food groups daily\n- Cook with minimal oil\n- Avoid adding excess salt and sugar\n- Teach children about healthy eating from an early age"
     },
   ];
 
