@@ -2,8 +2,8 @@ import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import VoiceInput from "@/components/VoiceInput";
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   Play,
   Volume2,
   Heart,
@@ -13,12 +13,16 @@ import {
   Baby,
   Sun,
   Shield,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  ArrowLeft
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const Education = () => {
   const { toast } = useToast();
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
   const handleVoiceQuery = (text: string) => {
     toast({
