@@ -607,8 +607,21 @@ const Education = () => {
                     <BookOpen className="w-4 h-4 mr-2" />
                     Read
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Play className="w-4 h-4" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const utterance = new SpeechSynthesisUtterance(`${article.title}. ${(article as any).content || article.description}`);
+                      utterance.rate = 1;
+                      utterance.pitch = 1;
+                      utterance.volume = 1;
+                      utterance.onstart = () => setIsPlaying(true);
+                      utterance.onend = () => setIsPlaying(false);
+                      setSpeechUtterance(utterance);
+                      window.speechSynthesis.speak(utterance);
+                    }}
+                  >
+                    <Volume2 className="w-4 h-4" />
                   </Button>
                 </div>
               </Card>
