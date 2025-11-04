@@ -221,6 +221,69 @@ const Education = () => {
     });
   };
 
+  const handleListenArticle = () => {
+    if (!selectedArticle) return;
+
+    // If already playing, stop it
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setSpeechUtterance(null);
+      toast({
+        title: "Audio stopped",
+        description: "Article playback has been stopped.",
+      });
+      return;
+    }
+
+    // Check if browser supports speech synthesis
+    if (!window.speechSynthesis) {
+      toast({
+        title: "Audio not supported",
+        description: "Your browser doesn't support audio playback.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a new utterance for the article
+    const textToSpeak = `${selectedArticle.title}. ${selectedArticle.content}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      toast({
+        title: "Now Playing",
+        description: `Listening to: ${selectedArticle.title}`,
+      });
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setSpeechUtterance(null);
+      toast({
+        title: "Playback Complete",
+        description: "Article finished playing.",
+      });
+    };
+
+    utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      setIsPlaying(false);
+      toast({
+        title: "Audio Error",
+        description: `Error during playback: ${event.error}`,
+        variant: "destructive",
+      });
+    };
+
+    setSpeechUtterance(utterance);
+    window.speechSynthesis.speak(utterance);
+  };
+
   const categories = [
     { 
       icon: Heart, 
