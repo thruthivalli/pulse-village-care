@@ -330,7 +330,56 @@ const Education = () => {
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
       <Navigation />
-      
+
+      {/* Full Article Modal */}
+      {selectedArticle && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex-1">
+                  <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium mb-3 inline-block">
+                    {selectedTopic}
+                  </span>
+                  <h1 className="text-3xl font-bold text-foreground mb-2">{selectedArticle.title}</h1>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span>{selectedArticle.duration}</span>
+                    <span>{selectedArticle.language}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="prose prose-sm max-w-none mb-8">
+                <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                  {selectedArticle.content}
+                </p>
+              </div>
+
+              <div className="flex gap-3 pt-6 border-t border-border">
+                <Button
+                  className="flex-1"
+                  onClick={() => setSelectedArticle(null)}
+                >
+                  Close
+                </Button>
+                {selectedArticle.audioAvailable && (
+                  <Button variant="outline" className="flex-1">
+                    <Volume2 className="w-4 h-4 mr-2" />
+                    Listen to Article
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
       <div className="container mx-auto px-4 pt-24">
         {/* Header */}
         <div className="mb-8">
