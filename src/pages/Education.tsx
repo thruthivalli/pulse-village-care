@@ -514,7 +514,11 @@ const Education = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button className="flex-1" size="sm">
+                  <Button
+                    className="flex-1"
+                    size="sm"
+                    onClick={() => setSelectedArticle(article)}
+                  >
                     <BookOpen className="w-4 h-4 mr-2" />
                     Read
                   </Button>
