@@ -343,24 +343,78 @@ const Education = () => {
           />
         </Card>
 
-        {/* Categories */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Health Topics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((category, index) => (
-              <Card 
-                key={index} 
-                className="p-5 text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className={`w-14 h-14 ${category.bg} rounded-full flex items-center justify-center mx-auto mb-3`}>
-                  <category.icon className={`w-7 h-7 ${category.color}`} />
-                </div>
-                <h3 className="font-bold text-foreground mb-1">{category.title}</h3>
-                <p className="text-xs text-muted-foreground">{category.articles} articles</p>
-              </Card>
-            ))}
+        {/* Categories or Topic Articles View */}
+        {selectedTopic ? (
+          <div className="mb-8">
+            <button
+              onClick={() => setSelectedTopic(null)}
+              className="flex items-center gap-2 text-primary hover:text-primary/80 mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-medium">Back to Topics</span>
+            </button>
+
+            <h2 className="text-3xl font-bold text-foreground mb-8">{selectedTopic} Articles</h2>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(topicArticles[selectedTopic as keyof typeof topicArticles] || []).map((article) => (
+                <Card key={article.id} className="p-6 hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+                      {selectedTopic}
+                    </span>
+                    {article.audioAvailable && (
+                      <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                        <Volume2 className="w-4 h-4 text-secondary" />
+                      </div>
+                    )}
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-3">{article.title}</h3>
+                  <p className="text-muted-foreground mb-4 flex-grow">{article.description}</p>
+
+                  <p className="text-sm text-muted-foreground mb-4 text-justify">{article.content}</p>
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <span>{article.duration}</span>
+                    <span className="text-xs">{article.language}</span>
+                  </div>
+
+                  <div className="flex gap-2 mt-auto">
+                    <Button className="flex-1" size="sm">
+                      <BookOpen className="w-4 h-4 mr-2" />
+                      Read
+                    </Button>
+                    {article.audioAvailable && (
+                      <Button variant="outline" size="sm">
+                        <Volume2 className="w-4 h-4" />
+                      </Button>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Health Topics</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((category, index) => (
+                <Card
+                  key={index}
+                  className="p-5 text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                  onClick={() => setSelectedTopic(category.title)}
+                >
+                  <div className={`w-14 h-14 ${category.bg} rounded-full flex items-center justify-center mx-auto mb-3`}>
+                    <category.icon className={`w-7 h-7 ${category.color}`} />
+                  </div>
+                  <h3 className="font-bold text-foreground mb-1">{category.title}</h3>
+                  <p className="text-xs text-muted-foreground">{category.articles} articles</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Featured Articles */}
         <div className="mb-8">
