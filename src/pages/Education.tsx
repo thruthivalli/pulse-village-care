@@ -24,6 +24,183 @@ const Education = () => {
   const { toast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
 
+  const topicArticles = {
+    "Heart Health": [
+      {
+        id: 1,
+        title: "Managing High Blood Pressure",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Essential tips for controlling hypertension through diet and lifestyle changes.",
+        content: "High blood pressure (hypertension) is a leading cause of heart disease. Learn about salt reduction, regular exercise, stress management, and when to take medications. Key points include: monitoring your BP regularly, maintaining a healthy weight, limiting alcohol, and eating potassium-rich foods."
+      },
+      {
+        id: 2,
+        title: "Understanding Heart Attack Symptoms",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Recognize early warning signs and know when to seek emergency help.",
+        content: "Chest pain is the most common symptom, but heart attacks can also present as shortness of breath, sweating, nausea, or fatigue. Women may experience different symptoms. Learn about risk factors and prevention strategies including regular check-ups and a heart-healthy lifestyle."
+      },
+      {
+        id: 3,
+        title: "Cholesterol: What You Need to Know",
+        duration: "4 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Managing cholesterol levels to prevent heart disease.",
+        content: "Understand the difference between good (HDL) and bad (LDL) cholesterol. Learn how to reduce cholesterol through diet, exercise, and medication if needed. Include more fiber, choose lean meats, and limit saturated fats."
+      }
+    ],
+    "Diabetes Care": [
+      {
+        id: 1,
+        title: "Understanding Diabetes",
+        duration: "7 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Learn about blood sugar management, symptoms, and daily care routines.",
+        content: "Diabetes is a condition where your body cannot regulate blood sugar levels. Type 1 occurs when the pancreas doesn't produce insulin, while Type 2 is when the body resists insulin. Management involves regular monitoring, medication, diet, and exercise."
+      },
+      {
+        id: 2,
+        title: "Blood Sugar Monitoring at Home",
+        duration: "5 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "How to test your blood sugar and interpret results.",
+        content: "Use a glucometer to check blood sugar levels as recommended by your doctor. Normal fasting levels are 70-100 mg/dL. Maintain a log to track patterns and discuss with your health worker. Regular monitoring helps adjust diet and medication."
+      },
+      {
+        id: 3,
+        title: "Diabetic Diet Guidelines",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Foods that help control blood sugar and prevent complications.",
+        content: "Choose whole grains, vegetables, lean proteins, and healthy fats. Avoid sugary drinks and refined carbohydrates. Eat smaller portions at regular intervals. Include foods high in fiber like vegetables, beans, and whole grains."
+      }
+    ],
+    "Nutrition": [
+      {
+        id: 1,
+        title: "Nutrition for Rural Communities",
+        duration: "4 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "Affordable and nutritious meal planning with locally available foods.",
+        content: "Create balanced meals using local produce. Include cereals (rice, wheat), pulses (dal), vegetables, and affordable protein sources. Plan seasonal meals and use traditional recipes adapted for better nutrition. Teach children about healthy eating habits."
+      },
+      {
+        id: 2,
+        title: "Essential Nutrients and Food Sources",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Vitamins, minerals, and proteins your body needs daily.",
+        content: "Calcium from milk and leafy greens, iron from spinach and lentils, protein from eggs and beans, vitamins from fruits and vegetables. Understanding these nutrients helps you plan better meals. A balanced diet includes all food groups in right proportions."
+      },
+      {
+        id: 3,
+        title: "Food Safety and Hygiene",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: false,
+        description: "Prevent foodborne illnesses through proper handling and storage.",
+        content: "Wash hands before cooking, keep raw and cooked foods separate, store food at proper temperatures, and cook food thoroughly. Clean vegetables and fruits. Use clean water for cooking and drinking. These practices prevent bacterial infections."
+      }
+    ],
+    "Exercise": [
+      {
+        id: 1,
+        title: "Benefits of Regular Exercise",
+        duration: "5 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "How physical activity improves your overall health and longevity.",
+        content: "Exercise strengthens your heart, improves lung capacity, helps maintain healthy weight, reduces stress, and prevents chronic diseases. Even moderate exercise like 30-minute walks daily can significantly improve health. Start slowly and gradually increase intensity."
+      },
+      {
+        id: 2,
+        title: "Simple Home Exercises for All Ages",
+        duration: "7 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "Safe and effective exercises you can do at home without equipment.",
+        content: "Walking, stretching, squats, and yoga are excellent home exercises. Even elderly people and those with chronic conditions can benefit from modified exercises. Do warm-up exercises first. Consistency is more important than intensity."
+      },
+      {
+        id: 3,
+        title: "Exercise for Weight Management",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Combining exercise with diet for healthy weight loss.",
+        content: "A combination of cardio and strength training is most effective. Exercise helps burn calories and builds muscle which increases metabolism. Combine with balanced diet for sustained weight loss. Aim for 150 minutes of moderate exercise weekly."
+      }
+    ],
+    "Maternal Health": [
+      {
+        id: 1,
+        title: "Prenatal Care Essentials",
+        duration: "8 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "What every pregnant woman should know about regular check-ups and nutrition.",
+        content: "Regular antenatal check-ups help detect complications early. Take iron and folic acid supplements, maintain good nutrition, get adequate rest, and attend vaccination clinics. Learn about danger signs like severe headache, vision problems, or abdominal pain."
+      },
+      {
+        id: 2,
+        title: "Nutrition During Pregnancy and Lactation",
+        duration: "7 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Foods and supplements needed for healthy pregnancy and breastfeeding.",
+        content: "Increase protein, calcium, and iron intake. Eat diverse foods including vegetables, fruits, whole grains, and protein sources. Stay hydrated. Avoid unsafe foods like raw eggs and unpasteurized dairy. Breastfeeding mothers need extra calories and continue taking nutritional supplements."
+      },
+      {
+        id: 3,
+        title: "Postpartum Care and Recovery",
+        duration: "6 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: false,
+        description: "Caring for yourself after delivery and recognizing warning signs.",
+        content: "Rest adequately for proper recovery. Keep birth area clean and dry. Monitor for fever, excessive bleeding, or severe pain - these are danger signs. Practice perineal care, take prescribed medications, and maintain good nutrition to aid recovery."
+      }
+    ],
+    "Preventive Care": [
+      {
+        id: 1,
+        title: "Vaccinations for Every Age",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Immunization schedules and importance of vaccines for disease prevention.",
+        content: "Follow the government immunization schedule for children and adults. Vaccines prevent serious diseases like measles, polio, tetanus, and influenza. Maintain vaccination records. Get boosters as recommended by your health worker."
+      },
+      {
+        id: 2,
+        title: "Regular Health Check-ups",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Why routine screening and health monitoring is essential.",
+        content: "Regular check-ups help detect diseases early when treatment is more effective. Get blood pressure checked, blood tests, and weight monitoring. Adults over 40 should get regular screening for chronic diseases. Keep health records organized."
+      },
+      {
+        id: 3,
+        title: "Hygiene and Sanitation Practices",
+        duration: "4 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Simple practices that prevent infectious diseases.",
+        content: "Wash hands with soap after using bathroom and before eating. Use clean drinking water. Practice open defecation-free (ODF) habits. Keep living areas clean. Maintain personal hygiene including bathing regularly and keeping nails clean."
+      }
+    ]
+  };
+
   const handleVoiceQuery = (text: string) => {
     toast({
       title: "Searching health topics",
