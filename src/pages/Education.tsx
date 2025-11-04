@@ -871,7 +871,11 @@ const Education = () => {
                     <span>{video.duration}</span>
                   </div>
 
-                  <Button className="w-full" variant="outline">
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => setSelectedVideo(video)}
+                  >
                     <Play className="w-4 h-4 mr-2" />
                     Watch Tutorial
                   </Button>
