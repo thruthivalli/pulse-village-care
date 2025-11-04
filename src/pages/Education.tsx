@@ -466,6 +466,87 @@ const Education = () => {
     <div className="min-h-screen bg-background pb-24 md:pb-8">
       <Navigation />
 
+      {/* Video Tutorial Modal */}
+      {selectedVideo && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h1 className="text-3xl font-bold text-foreground mb-2">{selectedVideo.title}</h1>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">
+                      {selectedVideo.category}
+                    </span>
+                    <span>{selectedVideo.duration}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedVideo(null)}
+                  className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Video Player */}
+              <div className="w-full bg-black rounded-lg overflow-hidden mb-6 aspect-video flex items-center justify-center">
+                <div className="text-center">
+                  <Play className="w-20 h-20 text-white/50 mx-auto mb-4" />
+                  <div className="space-y-2">
+                    <p className="text-white font-medium">{selectedVideo.title}</p>
+                    <p className="text-white/70 text-sm">{selectedVideo.duration}</p>
+                    <div className="mt-6 space-y-3">
+                      <Button className="gap-2">
+                        <Play className="w-4 h-4" />
+                        Play Video
+                      </Button>
+                      <Button variant="outline" className="w-full">
+                        Download for Offline
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Video Description */}
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-foreground mb-3">About This Video</h2>
+                <p className="text-foreground leading-relaxed">{selectedVideo.description}</p>
+              </div>
+
+              {/* Video Details */}
+              <div className="grid md:grid-cols-2 gap-4 mb-6 p-4 bg-muted/30 rounded-lg">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Duration</p>
+                  <p className="font-medium text-foreground">{selectedVideo.duration}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Category</p>
+                  <p className="font-medium text-foreground">{selectedVideo.category}</p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  className="flex-1"
+                  onClick={() => setSelectedVideo(null)}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Share
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
       {/* Full Article Modal */}
       {selectedArticle && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
