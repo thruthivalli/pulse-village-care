@@ -440,9 +440,13 @@ const Education = () => {
                   Close
                 </Button>
                 {selectedArticle.audioAvailable && (
-                  <Button variant="outline" className="flex-1">
+                  <Button
+                    variant={isPlaying ? "destructive" : "outline"}
+                    className="flex-1"
+                    onClick={handleListenArticle}
+                  >
                     <Volume2 className="w-4 h-4 mr-2" />
-                    Listen to Article
+                    {isPlaying ? "Stop Audio" : "Listen to Article"}
                   </Button>
                 )}
               </div>
