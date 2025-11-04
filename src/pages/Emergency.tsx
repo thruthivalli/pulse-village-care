@@ -212,7 +212,11 @@ const Emergency = () => {
                       <div className="text-sm text-muted-foreground">{contact.number}</div>
                     </div>
                   </div>
-                  <Button size="sm" className="gap-2">
+                  <Button
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => handleCall(contact.number, contact.name)}
+                  >
                     <Phone className="w-4 h-4" />
                     Call
                   </Button>
