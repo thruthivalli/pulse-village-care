@@ -35,9 +35,22 @@ const VoiceInput = ({ onTranscript, placeholder = "Speak or type..." }: VoiceInp
       recognitionRef.current.onerror = (event: any) => {
         console.error('Speech recognition error:', event.error);
         setIsListening(false);
+
+        let errorMessage = "Could not access microphone. Please type instead.";
+
+        if (event.error === 'network') {
+          errorMessage = "Network error: Please check your internet connection and try again.";
+        } else if (event.error === 'no-speech') {
+          errorMessage = "No speech detected. Please try again.";
+        } else if (event.error === 'audio-capture') {
+          errorMessage = "Could not access microphone. Please check permissions.";
+        } else if (event.error === 'not-allowed') {
+          errorMessage = "Microphone access denied. Please enable microphone permissions in your browser.";
+        }
+
         toast({
           title: "Voice input error",
-          description: "Could not access microphone. Please type instead.",
+          description: errorMessage,
           variant: "destructive",
         });
       };
