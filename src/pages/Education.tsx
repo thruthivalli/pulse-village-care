@@ -578,35 +578,57 @@ const Education = () => {
                     <span className="text-xs">{article.language}</span>
                   </div>
 
-                  <div className="flex gap-2 mt-auto">
-                    <Button
-                      className="flex-1"
-                      size="sm"
-                      onClick={() => setSelectedArticle(article)}
-                    >
-                      <BookOpen className="w-4 h-4 mr-2" />
-                      Read
-                    </Button>
-                    {article.audioAvailable && (
+                  <div className="flex flex-col gap-2 mt-auto">
+                    <div className="flex gap-2">
                       <Button
-                        variant="outline"
+                        className="flex-1"
                         size="sm"
-                        onClick={() => {
-                          setSelectedArticle(article);
-                          setTimeout(() => {
-                            const utterance = new SpeechSynthesisUtterance(`${article.title}. ${article.content}`);
-                            utterance.rate = 1;
-                            utterance.pitch = 1;
-                            utterance.volume = 1;
-                            utterance.onstart = () => setIsPlaying(true);
-                            utterance.onend = () => setIsPlaying(false);
-                            setSpeechUtterance(utterance);
-                            window.speechSynthesis.speak(utterance);
-                          }, 100);
-                        }}
+                        onClick={() => setSelectedArticle(article)}
                       >
-                        <Volume2 className="w-4 h-4" />
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        Read
                       </Button>
+                      <Button
+                        variant={savedArticles.includes(article.id) ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleSaveArticle(article.id, article.title)}
+                        title={savedArticles.includes(article.id) ? "Remove from saved" : "Save for offline"}
+                      >
+                        <BookOpen className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    {article.audioAvailable && (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => {
+                            setSelectedArticle(article);
+                            setTimeout(() => {
+                              const utterance = new SpeechSynthesisUtterance(`${article.title}. ${article.content}`);
+                              utterance.rate = 1;
+                              utterance.pitch = 1;
+                              utterance.volume = 1;
+                              utterance.onstart = () => setIsPlaying(true);
+                              utterance.onend = () => setIsPlaying(false);
+                              setSpeechUtterance(utterance);
+                              window.speechSynthesis.speak(utterance);
+                            }, 100);
+                          }}
+                        >
+                          <Volume2 className="w-4 h-4 mr-2" />
+                          Listen
+                        </Button>
+                        <Button
+                          variant={downloadedAudio.includes(article.id) ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handleDownloadAudio(article.id, article.title)}
+                          title={downloadedAudio.includes(article.id) ? "Audio downloaded" : "Download audio"}
+                        >
+                          <Volume2 className="w-4 h-4" />
+                        </Button>
+                      </div>
                     )}
                   </div>
                 </Card>
