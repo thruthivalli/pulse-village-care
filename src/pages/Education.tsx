@@ -493,23 +493,29 @@ const Education = () => {
               </div>
 
               {/* Video Player */}
-              <div className="w-full bg-black rounded-lg overflow-hidden mb-6 aspect-video flex items-center justify-center">
-                <div className="text-center">
-                  <Play className="w-20 h-20 text-white/50 mx-auto mb-4" />
-                  <div className="space-y-2">
-                    <p className="text-white font-medium">{selectedVideo.title}</p>
-                    <p className="text-white/70 text-sm">{selectedVideo.duration}</p>
-                    <div className="mt-6 space-y-3">
-                      <Button className="gap-2">
-                        <Play className="w-4 h-4" />
-                        Play Video
-                      </Button>
-                      <Button variant="outline" className="w-full">
-                        Download for Offline
-                      </Button>
-                    </div>
-                  </div>
+              <div className="w-full bg-black rounded-lg overflow-hidden mb-6">
+                <div className="w-full aspect-video">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1`}
+                    title={selectedVideo.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg"
+                  ></iframe>
                 </div>
+              </div>
+
+              <div className="flex gap-2 mb-6">
+                <Button className="flex-1" variant="outline">
+                  <Play className="w-4 h-4 mr-2" />
+                  Replay
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  Download for Offline
+                </Button>
               </div>
 
               {/* Video Description */}
