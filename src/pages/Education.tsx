@@ -20,9 +20,20 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 
+interface Article {
+  id: number;
+  title: string;
+  duration: string;
+  language: string;
+  audioAvailable: boolean;
+  description: string;
+  content: string;
+}
+
 const Education = () => {
   const { toast } = useToast();
   const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const topicArticles = {
     "Heart Health": [
