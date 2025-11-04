@@ -345,7 +345,7 @@ const Education = () => {
               <div className="flex items-start justify-between mb-6">
                 <div className="flex-1">
                   <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium mb-3 inline-block">
-                    {selectedTopic}
+                    {selectedTopic || (selectedArticle as any).category}
                   </span>
                   <h1 className="text-3xl font-bold text-foreground mb-2">{selectedArticle.title}</h1>
                   <div className="flex items-center gap-4 text-sm text-muted-foreground">
