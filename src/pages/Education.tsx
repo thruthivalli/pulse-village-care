@@ -40,6 +40,7 @@ const Education = () => {
   const [downloadedAudio, setDownloadedAudio] = useState<number[]>([]);
   const [offlineMode, setOfflineMode] = useState(false);
   const [showOfflineContent, setShowOfflineContent] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<any>(null);
 
   const topicArticles = {
     "Heart Health": [
