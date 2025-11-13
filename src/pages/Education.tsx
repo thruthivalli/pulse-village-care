@@ -2,8 +2,8 @@ import Navigation from "@/components/Navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import VoiceInput from "@/components/VoiceInput";
-import { 
-  BookOpen, 
+import {
+  BookOpen,
   Play,
   Volume2,
   Heart,
@@ -13,12 +13,211 @@ import {
   Baby,
   Sun,
   Shield,
-  AlertTriangle
+  AlertTriangle,
+  X,
+  ArrowLeft
 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+
+interface Article {
+  id: number;
+  title: string;
+  duration: string;
+  language: string;
+  audioAvailable: boolean;
+  description: string;
+  content: string;
+}
 
 const Education = () => {
   const { toast } = useToast();
+  const [selectedTopic, setSelectedTopic] = useState<string | null>(null);
+  const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [speechUtterance, setSpeechUtterance] = useState<SpeechSynthesisUtterance | null>(null);
+  const [savedArticles, setSavedArticles] = useState<number[]>([]);
+  const [downloadedAudio, setDownloadedAudio] = useState<number[]>([]);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [showOfflineContent, setShowOfflineContent] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState<any>(null);
+
+  const topicArticles = {
+    "Heart Health": [
+      {
+        id: 1,
+        title: "Managing High Blood Pressure",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Essential tips for controlling hypertension through diet and lifestyle changes.",
+        content: "High blood pressure (hypertension) is a leading cause of heart disease. Learn about salt reduction, regular exercise, stress management, and when to take medications. Key points include: monitoring your BP regularly, maintaining a healthy weight, limiting alcohol, and eating potassium-rich foods."
+      },
+      {
+        id: 2,
+        title: "Understanding Heart Attack Symptoms",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Recognize early warning signs and know when to seek emergency help.",
+        content: "Chest pain is the most common symptom, but heart attacks can also present as shortness of breath, sweating, nausea, or fatigue. Women may experience different symptoms. Learn about risk factors and prevention strategies including regular check-ups and a heart-healthy lifestyle."
+      },
+      {
+        id: 3,
+        title: "Cholesterol: What You Need to Know",
+        duration: "4 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Managing cholesterol levels to prevent heart disease.",
+        content: "Understand the difference between good (HDL) and bad (LDL) cholesterol. Learn how to reduce cholesterol through diet, exercise, and medication if needed. Include more fiber, choose lean meats, and limit saturated fats."
+      }
+    ],
+    "Diabetes Care": [
+      {
+        id: 1,
+        title: "Understanding Diabetes",
+        duration: "7 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Learn about blood sugar management, symptoms, and daily care routines.",
+        content: "Diabetes is a condition where your body cannot regulate blood sugar levels. Type 1 occurs when the pancreas doesn't produce insulin, while Type 2 is when the body resists insulin. Management involves regular monitoring, medication, diet, and exercise."
+      },
+      {
+        id: 2,
+        title: "Blood Sugar Monitoring at Home",
+        duration: "5 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "How to test your blood sugar and interpret results.",
+        content: "Use a glucometer to check blood sugar levels as recommended by your doctor. Normal fasting levels are 70-100 mg/dL. Maintain a log to track patterns and discuss with your health worker. Regular monitoring helps adjust diet and medication."
+      },
+      {
+        id: 3,
+        title: "Diabetic Diet Guidelines",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Foods that help control blood sugar and prevent complications.",
+        content: "Choose whole grains, vegetables, lean proteins, and healthy fats. Avoid sugary drinks and refined carbohydrates. Eat smaller portions at regular intervals. Include foods high in fiber like vegetables, beans, and whole grains."
+      }
+    ],
+    "Nutrition": [
+      {
+        id: 1,
+        title: "Nutrition for Rural Communities",
+        duration: "4 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "Affordable and nutritious meal planning with locally available foods.",
+        content: "Create balanced meals using local produce. Include cereals (rice, wheat), pulses (dal), vegetables, and affordable protein sources. Plan seasonal meals and use traditional recipes adapted for better nutrition. Teach children about healthy eating habits."
+      },
+      {
+        id: 2,
+        title: "Essential Nutrients and Food Sources",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Vitamins, minerals, and proteins your body needs daily.",
+        content: "Calcium from milk and leafy greens, iron from spinach and lentils, protein from eggs and beans, vitamins from fruits and vegetables. Understanding these nutrients helps you plan better meals. A balanced diet includes all food groups in right proportions."
+      },
+      {
+        id: 3,
+        title: "Food Safety and Hygiene",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: false,
+        description: "Prevent foodborne illnesses through proper handling and storage.",
+        content: "Wash hands before cooking, keep raw and cooked foods separate, store food at proper temperatures, and cook food thoroughly. Clean vegetables and fruits. Use clean water for cooking and drinking. These practices prevent bacterial infections."
+      }
+    ],
+    "Exercise": [
+      {
+        id: 1,
+        title: "Benefits of Regular Exercise",
+        duration: "5 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "How physical activity improves your overall health and longevity.",
+        content: "Exercise strengthens your heart, improves lung capacity, helps maintain healthy weight, reduces stress, and prevents chronic diseases. Even moderate exercise like 30-minute walks daily can significantly improve health. Start slowly and gradually increase intensity."
+      },
+      {
+        id: 2,
+        title: "Simple Home Exercises for All Ages",
+        duration: "7 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: true,
+        description: "Safe and effective exercises you can do at home without equipment.",
+        content: "Walking, stretching, squats, and yoga are excellent home exercises. Even elderly people and those with chronic conditions can benefit from modified exercises. Do warm-up exercises first. Consistency is more important than intensity."
+      },
+      {
+        id: 3,
+        title: "Exercise for Weight Management",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Combining exercise with diet for healthy weight loss.",
+        content: "A combination of cardio and strength training is most effective. Exercise helps burn calories and builds muscle which increases metabolism. Combine with balanced diet for sustained weight loss. Aim for 150 minutes of moderate exercise weekly."
+      }
+    ],
+    "Maternal Health": [
+      {
+        id: 1,
+        title: "Prenatal Care Essentials",
+        duration: "8 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "What every pregnant woman should know about regular check-ups and nutrition.",
+        content: "Regular antenatal check-ups help detect complications early. Take iron and folic acid supplements, maintain good nutrition, get adequate rest, and attend vaccination clinics. Learn about danger signs like severe headache, vision problems, or abdominal pain."
+      },
+      {
+        id: 2,
+        title: "Nutrition During Pregnancy and Lactation",
+        duration: "7 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Foods and supplements needed for healthy pregnancy and breastfeeding.",
+        content: "Increase protein, calcium, and iron intake. Eat diverse foods including vegetables, fruits, whole grains, and protein sources. Stay hydrated. Avoid unsafe foods like raw eggs and unpasteurized dairy. Breastfeeding mothers need extra calories and continue taking nutritional supplements."
+      },
+      {
+        id: 3,
+        title: "Postpartum Care and Recovery",
+        duration: "6 min read",
+        language: "English, Hindi, Telugu",
+        audioAvailable: false,
+        description: "Caring for yourself after delivery and recognizing warning signs.",
+        content: "Rest adequately for proper recovery. Keep birth area clean and dry. Monitor for fever, excessive bleeding, or severe pain - these are danger signs. Practice perineal care, take prescribed medications, and maintain good nutrition to aid recovery."
+      }
+    ],
+    "Preventive Care": [
+      {
+        id: 1,
+        title: "Vaccinations for Every Age",
+        duration: "6 min read",
+        language: "English, Hindi",
+        audioAvailable: true,
+        description: "Immunization schedules and importance of vaccines for disease prevention.",
+        content: "Follow the government immunization schedule for children and adults. Vaccines prevent serious diseases like measles, polio, tetanus, and influenza. Maintain vaccination records. Get boosters as recommended by your health worker."
+      },
+      {
+        id: 2,
+        title: "Regular Health Check-ups",
+        duration: "5 min read",
+        language: "English, Hindi, Tamil",
+        audioAvailable: true,
+        description: "Why routine screening and health monitoring is essential.",
+        content: "Regular check-ups help detect diseases early when treatment is more effective. Get blood pressure checked, blood tests, and weight monitoring. Adults over 40 should get regular screening for chronic diseases. Keep health records organized."
+      },
+      {
+        id: 3,
+        title: "Hygiene and Sanitation Practices",
+        duration: "4 min read",
+        language: "English, Hindi",
+        audioAvailable: false,
+        description: "Simple practices that prevent infectious diseases.",
+        content: "Wash hands with soap after using bathroom and before eating. Use clean drinking water. Practice open defecation-free (ODF) habits. Keep living areas clean. Maintain personal hygiene including bathing regularly and keeping nails clean."
+      }
+    ]
+  };
 
   const handleVoiceQuery = (text: string) => {
     toast({
@@ -26,6 +225,131 @@ const Education = () => {
       description: `Looking for information about: "${text}"`,
     });
   };
+
+  const handleListenArticle = () => {
+    if (!selectedArticle) return;
+
+    // If already playing, stop it
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+      setSpeechUtterance(null);
+      toast({
+        title: "Audio stopped",
+        description: "Article playback has been stopped.",
+      });
+      return;
+    }
+
+    // Check if browser supports speech synthesis
+    if (!window.speechSynthesis) {
+      toast({
+        title: "Audio not supported",
+        description: "Your browser doesn't support audio playback.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Create a new utterance for the article
+    const textToSpeak = `${selectedArticle.title}. ${selectedArticle.content}`;
+    const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+    utterance.rate = 1;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    utterance.onstart = () => {
+      setIsPlaying(true);
+      toast({
+        title: "Now Playing",
+        description: `Listening to: ${selectedArticle.title}`,
+      });
+    };
+
+    utterance.onend = () => {
+      setIsPlaying(false);
+      setSpeechUtterance(null);
+      toast({
+        title: "Playback Complete",
+        description: "Article finished playing.",
+      });
+    };
+
+    utterance.onerror = (event: SpeechSynthesisErrorEvent) => {
+      setIsPlaying(false);
+      toast({
+        title: "Audio Error",
+        description: `Error during playback: ${event.error}`,
+        variant: "destructive",
+      });
+    };
+
+    setSpeechUtterance(utterance);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  const handleSaveArticle = (articleId: number, articleTitle: string) => {
+    if (savedArticles.includes(articleId)) {
+      setSavedArticles(savedArticles.filter(id => id !== articleId));
+      toast({
+        title: "Article Removed",
+        description: `Removed "${articleTitle}" from saved articles.`,
+      });
+    } else {
+      setSavedArticles([...savedArticles, articleId]);
+      toast({
+        title: "Article Saved",
+        description: `"${articleTitle}" saved for offline access.`,
+      });
+    }
+  };
+
+  const handleDownloadAudio = (articleId: number, articleTitle: string) => {
+    if (downloadedAudio.includes(articleId)) {
+      setDownloadedAudio(downloadedAudio.filter(id => id !== articleId));
+      toast({
+        title: "Audio Removed",
+        description: `Removed audio for "${articleTitle}".`,
+      });
+    } else {
+      setDownloadedAudio([...downloadedAudio, articleId]);
+      toast({
+        title: "Audio Downloaded",
+        description: `Audio version of "${articleTitle}" saved for offline listening.`,
+      });
+    }
+  };
+
+  const offlineArticles = savedArticles.length;
+  const offlineAudios = downloadedAudio.length;
+
+  const videoTutorials = [
+    {
+      id: 1,
+      title: "Blood Pressure Monitoring Tutorial",
+      category: "Heart Health",
+      duration: "8 min",
+      youtubeId: "dQw4w9WgXcQ",
+      description: "Step-by-step guide on how to measure and record blood pressure at home."
+    },
+    {
+      id: 2,
+      title: "Diabetes Care Essentials",
+      category: "Diabetes Care",
+      duration: "10 min",
+      youtubeId: "jNQXAC9IVRw",
+      description: "Learn about daily diabetes management and insulin injection techniques."
+    },
+    {
+      id: 3,
+      title: "Nutritious Meal Preparation",
+      category: "Nutrition",
+      duration: "12 min",
+      youtubeId: "9bZkp7q19f0",
+      description: "Practical cooking tips for preparing healthy meals with local ingredients."
+    },
+  ];
 
   const categories = [
     { 
@@ -74,28 +398,34 @@ const Education = () => {
 
   const featuredArticles = [
     {
+      id: 1,
       title: "Managing High Blood Pressure",
       category: "Heart Health",
       duration: "5 min read",
       audioAvailable: true,
       language: "English, Hindi, Tamil",
-      description: "Essential tips for controlling hypertension through diet and lifestyle changes."
+      description: "Essential tips for controlling hypertension through diet and lifestyle changes.",
+      content: "High blood pressure (hypertension) is a leading cause of heart disease and stroke. It often has no symptoms, which is why it's called the 'silent killer'. Managing high blood pressure involves lifestyle changes and sometimes medication.\n\nKey strategies include:\n\n1. Reduce Sodium Intake: Limit salt to less than 2,300 mg per day. Use herbs and spices for flavoring instead of salt.\n\n2. Exercise Regularly: Aim for 150 minutes of moderate-intensity aerobic activity per week. This can help lower blood pressure by 5-7 mmHg.\n\n3. Maintain Healthy Weight: Losing just 10 pounds can significantly reduce blood pressure.\n\n4. Manage Stress: Practice relaxation techniques like deep breathing, yoga, or meditation.\n\n5. Eat Potassium-Rich Foods: Include foods like bananas, sweet potatoes, and leafy greens. Potassium helps balance sodium.\n\n6. Monitor Your Blood Pressure: Regular monitoring helps track progress and catch problems early.\n\n7. Limit Alcohol: Excessive alcohol consumption raises blood pressure.\n\n8. Medications: If lifestyle changes aren't enough, your doctor may prescribe medications to help control blood pressure. Always take medications as prescribed."
     },
     {
+      id: 2,
       title: "Understanding Diabetes",
       category: "Diabetes Care",
       duration: "7 min read",
       audioAvailable: true,
       language: "English, Hindi",
-      description: "Learn about blood sugar management, symptoms, and daily care routines."
+      description: "Learn about blood sugar management, symptoms, and daily care routines.",
+      content: "Diabetes is a chronic disease that affects how your body manages blood glucose (sugar). There are three main types: Type 1, Type 2, and Gestational diabetes.\n\nType 1 Diabetes occurs when the pancreas cannot produce insulin. It usually develops in children and young adults and requires daily insulin injections.\n\nType 2 Diabetes happens when the body cannot use insulin effectively (insulin resistance). It's the most common type and is often linked to lifestyle factors.\n\nSymptoms of diabetes include:\n- Increased thirst and frequent urination\n- Extreme fatigue\n- Unexplained weight loss\n- Blurred vision\n- Slow-healing wounds\n\nManaging Diabetes:\n\n1. Monitor Blood Sugar: Check your blood glucose levels as recommended by your healthcare provider using a glucometer.\n\n2. Eat Healthy: Choose whole grains, vegetables, and lean proteins. Avoid sugary drinks and processed foods.\n\n3. Stay Active: Regular exercise helps improve insulin sensitivity. Aim for at least 30 minutes of activity daily.\n\n4. Take Medications: If prescribed insulin or other medications, take them exactly as directed.\n\n5. Regular Check-ups: Visit your doctor regularly to monitor kidney function, eye health, and foot health.\n\n6. Manage Stress: Stress can affect blood sugar levels.\n\n7. Quit Smoking: Smoking increases the risk of diabetes complications."
     },
     {
+      id: 3,
       title: "Nutrition for Rural Communities",
       category: "Nutrition",
       duration: "4 min read",
       audioAvailable: true,
       language: "English, Hindi, Telugu",
-      description: "Affordable and nutritious meal planning with locally available foods."
+      description: "Affordable and nutritious meal planning with locally available foods.",
+      content: "Nutrition is crucial for health, but in rural communities, access to diverse food can be limited. However, local and traditional foods can provide excellent nutrition when properly planned.\n\nLocal Foods Rich in Nutrition:\n\n1. Grains: Rice, wheat, millet, and sorghum are excellent sources of carbohydrates and fiber. Choose whole grains when possible.\n\n2. Pulses (Legumes): Dal, beans, and lentils are rich in protein, fiber, and minerals. Combine with grains to create complete proteins.\n\n3. Vegetables: Leafy greens like spinach and cabbage provide iron and vitamins. Root vegetables offer carbohydrates and minerals.\n\n4. Local Fruits: Seasonal fruits provide vitamins and minerals. Mango, guava, and papaya are nutrient-dense.\n\n5. Eggs and Local Poultry: Excellent sources of protein and affordable.\n\nSample Meal Plan:\n\nBreakfast: Whole grain bread or rice with vegetables and eggs\nLunch: Dal with rice or millet, seasonal vegetables, and jaggery for sweetness\nDinner: Vegetable soup or stew with whole grains\nSnacks: Fruits, nuts, or seeds\n\nTips for Better Nutrition:\n- Plan meals seasonally using what's available\n- Include all food groups daily\n- Cook with minimal oil\n- Avoid adding excess salt and sugar\n- Teach children about healthy eating from an early age"
     },
   ];
 
@@ -138,7 +468,147 @@ const Education = () => {
   return (
     <div className="min-h-screen bg-background pb-24 md:pb-8">
       <Navigation />
-      
+
+      {/* Video Tutorial Modal */}
+      {selectedVideo && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-4xl max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div>
+                  <h1 className="text-3xl font-bold text-foreground mb-2">{selectedVideo.title}</h1>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span className="bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">
+                      {selectedVideo.category}
+                    </span>
+                    <span>{selectedVideo.duration}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedVideo(null)}
+                  className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Video Player */}
+              <div className="w-full bg-black rounded-lg overflow-hidden mb-6">
+                <div className="w-full aspect-video">
+                  <iframe
+                    width="100%"
+                    height="100%"
+                    src={`https://www.youtube.com/embed/${selectedVideo.youtubeId}?autoplay=1`}
+                    title={selectedVideo.title}
+                    frameBorder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="rounded-lg"
+                  ></iframe>
+                </div>
+              </div>
+
+              <div className="flex gap-2 mb-6">
+                <Button className="flex-1" variant="outline">
+                  <Play className="w-4 h-4 mr-2" />
+                  Replay
+                </Button>
+                <Button variant="outline" className="flex-1">
+                  Download for Offline
+                </Button>
+              </div>
+
+              {/* Video Description */}
+              <div className="mb-6">
+                <h2 className="text-xl font-bold text-foreground mb-3">About This Video</h2>
+                <p className="text-foreground leading-relaxed">{selectedVideo.description}</p>
+              </div>
+
+              {/* Video Details */}
+              <div className="grid md:grid-cols-2 gap-4 mb-6 p-4 bg-muted/30 rounded-lg">
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Duration</p>
+                  <p className="font-medium text-foreground">{selectedVideo.duration}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Category</p>
+                  <p className="font-medium text-foreground">{selectedVideo.category}</p>
+                </div>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex gap-3">
+                <Button
+                  className="flex-1"
+                  onClick={() => setSelectedVideo(null)}
+                >
+                  Close
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1"
+                >
+                  Share
+                </Button>
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
+      {/* Full Article Modal */}
+      {selectedArticle && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="p-8">
+              <div className="flex items-start justify-between mb-6">
+                <div className="flex-1">
+                  <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium mb-3 inline-block">
+                    {selectedTopic || (selectedArticle as any).category}
+                  </span>
+                  <h1 className="text-3xl font-bold text-foreground mb-2">{selectedArticle.title}</h1>
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <span>{selectedArticle.duration}</span>
+                    <span>{selectedArticle.language}</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setSelectedArticle(null)}
+                  className="flex-shrink-0 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="prose prose-sm max-w-none mb-8">
+                <p className="text-foreground whitespace-pre-wrap leading-relaxed">
+                  {selectedArticle.content}
+                </p>
+              </div>
+
+              <div className="flex gap-3 pt-6 border-t border-border">
+                <Button
+                  className="flex-1"
+                  onClick={() => setSelectedArticle(null)}
+                >
+                  Close
+                </Button>
+                {selectedArticle.audioAvailable && (
+                  <Button
+                    variant={isPlaying ? "destructive" : "outline"}
+                    className="flex-1"
+                    onClick={handleListenArticle}
+                  >
+                    <Volume2 className="w-4 h-4 mr-2" />
+                    {isPlaying ? "Stop Audio" : "Listen to Article"}
+                  </Button>
+                )}
+              </div>
+            </div>
+          </Card>
+        </div>
+      )}
+
       <div className="container mx-auto px-4 pt-24">
         {/* Header */}
         <div className="mb-8">
@@ -162,24 +632,120 @@ const Education = () => {
           />
         </Card>
 
-        {/* Categories */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">Health Topics</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((category, index) => (
-              <Card 
-                key={index} 
-                className="p-5 text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
-              >
-                <div className={`w-14 h-14 ${category.bg} rounded-full flex items-center justify-center mx-auto mb-3`}>
-                  <category.icon className={`w-7 h-7 ${category.color}`} />
-                </div>
-                <h3 className="font-bold text-foreground mb-1">{category.title}</h3>
-                <p className="text-xs text-muted-foreground">{category.articles} articles</p>
-              </Card>
-            ))}
+        {/* Categories or Topic Articles View */}
+        {selectedTopic ? (
+          <div className="mb-8">
+            <button
+              onClick={() => setSelectedTopic(null)}
+              className="flex items-center gap-2 text-primary hover:text-primary/80 mb-6 transition-colors"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              <span className="font-medium">Back to Topics</span>
+            </button>
+
+            <h2 className="text-3xl font-bold text-foreground mb-8">{selectedTopic} Articles</h2>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {(topicArticles[selectedTopic as keyof typeof topicArticles] || []).map((article) => (
+                <Card key={article.id} className="p-6 hover:shadow-lg transition-all duration-300 flex flex-col">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-xs bg-primary/10 text-primary px-3 py-1 rounded-full font-medium">
+                      {selectedTopic}
+                    </span>
+                    {article.audioAvailable && (
+                      <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                        <Volume2 className="w-4 h-4 text-secondary" />
+                      </div>
+                    )}
+                  </div>
+
+                  <h3 className="text-xl font-bold text-foreground mb-3">{article.title}</h3>
+                  <p className="text-muted-foreground mb-4 flex-grow">{article.description}</p>
+
+                  <p className="text-sm text-muted-foreground mb-4 text-justify">{article.content}</p>
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <span>{article.duration}</span>
+                    <span className="text-xs">{article.language}</span>
+                  </div>
+
+                  <div className="flex flex-col gap-2 mt-auto">
+                    <div className="flex gap-2">
+                      <Button
+                        className="flex-1"
+                        size="sm"
+                        onClick={() => setSelectedArticle(article)}
+                      >
+                        <BookOpen className="w-4 h-4 mr-2" />
+                        Read
+                      </Button>
+                      <Button
+                        variant={savedArticles.includes(article.id) ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handleSaveArticle(article.id, article.title)}
+                        title={savedArticles.includes(article.id) ? "Remove from saved" : "Save for offline"}
+                      >
+                        <BookOpen className="w-4 h-4" />
+                      </Button>
+                    </div>
+                    {article.audioAvailable && (
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1"
+                          onClick={() => {
+                            setSelectedArticle(article);
+                            setTimeout(() => {
+                              const utterance = new SpeechSynthesisUtterance(`${article.title}. ${article.content}`);
+                              utterance.rate = 1;
+                              utterance.pitch = 1;
+                              utterance.volume = 1;
+                              utterance.onstart = () => setIsPlaying(true);
+                              utterance.onend = () => setIsPlaying(false);
+                              setSpeechUtterance(utterance);
+                              window.speechSynthesis.speak(utterance);
+                            }, 100);
+                          }}
+                        >
+                          <Volume2 className="w-4 h-4 mr-2" />
+                          Listen
+                        </Button>
+                        <Button
+                          variant={downloadedAudio.includes(article.id) ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => handleDownloadAudio(article.id, article.title)}
+                          title={downloadedAudio.includes(article.id) ? "Audio downloaded" : "Download audio"}
+                        >
+                          <Volume2 className="w-4 h-4" />
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </Card>
+              ))}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Health Topics</h2>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+              {categories.map((category, index) => (
+                <Card
+                  key={index}
+                  className="p-5 text-center hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer"
+                  onClick={() => setSelectedTopic(category.title)}
+                >
+                  <div className={`w-14 h-14 ${category.bg} rounded-full flex items-center justify-center mx-auto mb-3`}>
+                    <category.icon className={`w-7 h-7 ${category.color}`} />
+                  </div>
+                  <h3 className="font-bold text-foreground mb-1">{category.title}</h3>
+                  <p className="text-xs text-muted-foreground">{category.articles} articles</p>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Featured Articles */}
         <div className="mb-8">
@@ -209,12 +775,29 @@ const Education = () => {
                 </div>
 
                 <div className="flex gap-2">
-                  <Button className="flex-1" size="sm">
+                  <Button
+                    className="flex-1"
+                    size="sm"
+                    onClick={() => setSelectedArticle(article)}
+                  >
                     <BookOpen className="w-4 h-4 mr-2" />
                     Read
                   </Button>
-                  <Button variant="outline" size="sm">
-                    <Play className="w-4 h-4" />
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => {
+                      const utterance = new SpeechSynthesisUtterance(`${article.title}. ${(article as any).content || article.description}`);
+                      utterance.rate = 1;
+                      utterance.pitch = 1;
+                      utterance.volume = 1;
+                      utterance.onstart = () => setIsPlaying(true);
+                      utterance.onend = () => setIsPlaying(false);
+                      setSpeechUtterance(utterance);
+                      window.speechSynthesis.speak(utterance);
+                    }}
+                  >
+                    <Volume2 className="w-4 h-4" />
                   </Button>
                 </div>
               </Card>
@@ -273,34 +856,97 @@ const Education = () => {
           </Card>
         </div>
 
+        {/* Video Tutorials */}
+        {!showOfflineContent && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold text-foreground mb-6">Video Tutorials</h2>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {videoTutorials.map((video) => (
+                <Card key={video.id} className="p-6 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-start justify-between mb-4">
+                    <span className="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">
+                      {video.category}
+                    </span>
+                  </div>
+
+                  <div className="w-full h-32 bg-muted rounded-lg flex items-center justify-center mb-4">
+                    <Play className="w-12 h-12 text-muted-foreground" />
+                  </div>
+
+                  <h3 className="text-lg font-bold text-foreground mb-2">{video.title}</h3>
+                  <p className="text-muted-foreground mb-4 text-sm">{video.description}</p>
+
+                  <div className="flex items-center justify-between text-sm text-muted-foreground mb-4">
+                    <span>{video.duration}</span>
+                  </div>
+
+                  <Button
+                    className="w-full"
+                    variant="outline"
+                    onClick={() => setSelectedVideo(video)}
+                  >
+                    <Play className="w-4 h-4 mr-2" />
+                    Watch Tutorial
+                  </Button>
+                </Card>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Offline Access Info */}
         <Card className="p-6 bg-secondary/5 border-secondary/20">
           <h2 className="text-xl font-bold text-foreground mb-3 flex items-center gap-2">
             <BookOpen className="w-5 h-5 text-secondary" />
             Offline Learning
           </h2>
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-6">
             All health education content is cached for offline access. Audio versions can be downloaded for listening without internet.
           </p>
-          <div className="grid md:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <BookOpen className="w-4 h-4 text-secondary" />
+
+          <div className="grid md:grid-cols-3 gap-4 text-sm mb-6">
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <BookOpen className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{offlineArticles} Articles Saved</span>
               </div>
-              <span>Text articles saved</span>
+              <p className="text-xs text-muted-foreground">Articles available offline</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <Volume2 className="w-4 h-4 text-secondary" />
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <Volume2 className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{offlineAudios} Audios Downloaded</span>
               </div>
-              <span>Audio versions available</span>
+              <p className="text-xs text-muted-foreground">Audio versions ready to play</p>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
-                <Play className="w-4 h-4 text-secondary" />
+            <div className="p-4 bg-white rounded-lg border border-border">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-8 h-8 bg-secondary/10 rounded-full flex items-center justify-center">
+                  <Play className="w-4 h-4 text-secondary" />
+                </div>
+                <span className="font-bold text-foreground">{videoTutorials.length} Video Tutorials</span>
               </div>
-              <span>Video tutorials cached</span>
+              <p className="text-xs text-muted-foreground">Educational videos cached</p>
             </div>
+          </div>
+
+          <div className="flex gap-3">
+            <Button
+              className="flex-1"
+              onClick={() => setShowOfflineContent(!showOfflineContent)}
+            >
+              {showOfflineContent ? "View All Content" : "View Offline Content"}
+            </Button>
+            <Button
+              variant="outline"
+              className="flex-1"
+            >
+              Download All
+            </Button>
           </div>
         </Card>
       </div>

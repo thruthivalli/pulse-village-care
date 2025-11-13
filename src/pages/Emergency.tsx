@@ -54,10 +54,29 @@ const Emergency = () => {
       title: "Processing emergency request",
       description: `Analyzing: "${text}"`,
     });
-    
+
     if (text.toLowerCase().includes('help') || text.toLowerCase().includes('emergency')) {
       handleEmergencyRequest();
     }
+  };
+
+  const handleCall = (phoneNumber: string, contactName: string) => {
+    // Use tel: protocol to initiate phone call
+    window.location.href = `tel:${phoneNumber.replace(/\s+/g, '')}`;
+    toast({
+      title: "Calling",
+      description: `Initiating call to ${contactName}...`,
+    });
+  };
+
+  const handleGetDirections = (hospitalName: string) => {
+    // Open Google Maps with hospital location
+    const mapsUrl = `https://maps.google.com/?q=${encodeURIComponent(hospitalName)}`;
+    window.open(mapsUrl, '_blank');
+    toast({
+      title: "Opening Maps",
+      description: `Getting directions to ${hospitalName}...`,
+    });
   };
 
   const emergencyContacts = [
@@ -193,7 +212,11 @@ const Emergency = () => {
                       <div className="text-sm text-muted-foreground">{contact.number}</div>
                     </div>
                   </div>
-                  <Button size="sm" className="gap-2">
+                  <Button
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => handleCall(contact.number, contact.name)}
+                  >
                     <Phone className="w-4 h-4" />
                     Call
                   </Button>
@@ -227,7 +250,12 @@ const Emergency = () => {
                     <span>Beds: {hospital.beds}</span>
                   </div>
                 </div>
-                <Button variant="outline" size="sm" className="w-full">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => handleGetDirections(hospital.name)}
+                >
                   <NavigationIcon className="w-4 h-4 mr-2" />
                   Get Directions
                 </Button>
